@@ -26,8 +26,6 @@ public class GermanLetters {
 	static String word = "Hallo";
 	static int score = 0;
 	private JFrame ourFrame;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
 	private JPanel controlPanel;
 	private JPanel resultPanel;
 	private JProgressBar progressBar;
@@ -46,7 +44,6 @@ public class GermanLetters {
 	JLabel resultTimeLabelValue;
 
 	public GermanLetters() {
-		// TODO Auto-generated constructor stub
 		ourFrame = new JFrame("german");
 		ourFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ourFrame.setSize(300, 300);
