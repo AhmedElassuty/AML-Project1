@@ -42,6 +42,11 @@ public class GermanLetters {
 	JLabel resultScoreLabelValue;
 	JLabel resultTimeLabel;
 	JLabel resultTimeLabelValue;
+	
+	String[] level_1 = {"Hallo", "Bluse", "Hund", "Aufwiedersehen", "Tschuss"
+			, "danke", "bitte", "schÖn", "schlafen", "bett"
+			, "mund", "hose", "nase", "schuhe", "singen"
+			, "sonne", "mond", "sterne", "wolken", "himmel"};
 
 	public GermanLetters() {
 		ourFrame = new JFrame("german");
