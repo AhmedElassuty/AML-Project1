@@ -52,12 +52,12 @@ public class GermanLetters {
 	Recognizer recognizer;
 
 	ArrayList<String[]> levels = new ArrayList<>();
-	String[] recognizedWord = new String[20];
+	String[][] recognizedWord = new String[2][20];
 
 	static String[] level_1 = { "Hallo", "Bluse", "Hund", "Aufwiedersehen",
-			"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett", "mund",
-			"hose", "nase", "schuhe", "singen", "sonne", "mond", "sterne",
-			"wolken", "himmel" };
+		"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett", "mund",
+		"hose", "nase", "schuhe", "singen", "sonne", "mond", "sterne",
+		"wolken", "himmel" };
 
 	static String[] level_2 = { "Hallo", "Bluse", "Hund", "Aufwiedersehen",
 			"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett" };
@@ -233,12 +233,12 @@ public class GermanLetters {
 
 		if (correct) {
 			letter_trials = 0;
-			if (recognizedWord[currentWordIndex] == null)
-				recognizedWord[currentWordIndex] = "";
-			recognizedWord[currentWordIndex] += uttered;
+			if (recognizedWord[currentLevelIndex][currentWordIndex] == null)
+				recognizedWord[currentLevelIndex][currentWordIndex] = (String) "";
+			recognizedWord[currentLevelIndex][currentWordIndex] += uttered;
 			currentWordCharacterIndex++;
 			resultRecognizedLabelValue
-					.setText(recognizedWord[currentWordIndex]);
+					.setText(recognizedWord[currentLevelIndex][currentWordIndex]);
 			resultScoreLabelValue.setText(score + "%");
 
 			if (currentWordCharacterIndex == currentWord.length()) {
