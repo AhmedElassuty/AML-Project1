@@ -1,7 +1,5 @@
 package edu.cmu.sphinx.demo.miniproject1tut9t4;
 
-
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -10,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -21,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-
 
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.recognizer.Recognizer;
@@ -52,7 +48,7 @@ public class GermanLetters {
 
 	JLabel levelNoLabel;
 	JLabel levelNoLabelValue;
-	
+
 	TimeFrame frame;
 
 	boolean firstClick = true;
@@ -61,14 +57,13 @@ public class GermanLetters {
 	ArrayList<String[]> levels = new ArrayList<>();
 	String[][] recognizedWord = new String[2][20];
 
-
 	static String[] level_1 = { "Hallo", "Bluse", "Hund", "Aufwiedersehen",
-		"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett", "mund",
-		"hose", "nase", "schuhe", "singen", "sonne", "mond", "sterne",
-		"wolken", "himmel" };
+			"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett", "mund",
+			"hose", "nase", "schuhe", "singen", "sonne", "mond", "sterne",
+			"wolken", "himmel" };
 
-	static String[] level_2 = { "arbeiten", "richtig", "klar", "spaß",
-			"viel", "welt", "haus", "katze", "essen", "möglich" };
+	static String[] level_2 = { "arbeiten", "richtig", "klar", "spaß", "viel",
+			"welt", "haus", "katze", "essen", "möglich" };
 
 	int currentLevelIndex = 0;
 
@@ -156,14 +151,14 @@ public class GermanLetters {
 		resultPanel.add(resultScoreLabelValue);
 
 		resultPanel.add(resultTimeLabel);
-		//resultPanel.add(resultTimeLabelValue);
-		
+		// resultPanel.add(resultTimeLabelValue);
+
 		frame = new TimeFrame();
 		resultPanel.add(frame);
 
 		ourFrame.setContentPane(controlPanel);
 
-		startRec = new JButton("Start Recording");		
+		startRec = new JButton("Start Recording");
 		startRec.addActionListener(new ActionListener() {
 
 			@Override
@@ -197,27 +192,6 @@ public class GermanLetters {
 
 	}
 
-	// public void recordingState() {
-	// SwingUtilities.invokeLater(new Runnable() {
-	// @Override
-	// public void run() {
-	// // endTime = System.currentTimeMillis();
-	// // elapsedTime = (endTime - startTime) / 1000;
-	// //
-	// // double percentage = (1.0 * score / size) * 100;
-	// // System.out.println(percentage);
-	// //
-	// // resultOriginalLabelValue.setText(word);
-	// // resultRecognizedLabelValue.setText(recognizedWord);
-	// // resultScoreLabelValue.setText(Double.toString(percentage) +
-	// // "%");
-	// // resultTimeLabelValue.setText(elapsedTime + " s");
-	// }
-	//
-	// });
-
-	// }
-
 	public void handleNextCharacter() {
 		String[] currentLevel = levels.get(currentLevelIndex);
 		currentWord = currentLevel[currentWordIndex];
@@ -226,16 +200,14 @@ public class GermanLetters {
 
 		String uttered = "";
 		boolean correct = false;
-	//	if (letter_trials < 3) {
-			System.out.println("Say something (" + letter_trials + ")");
-			edu.cmu.sphinx.result.Result res = recognizer.recognize();
-			uttered = res.getBestFinalResultNoFiller();
-			if (uttered.equalsIgnoreCase(currentCharacter)) {
-				score += 10;
-				correct = true;
-			}
-			letter_trials++;
-		//}
+		System.out.println("Say something (" + letter_trials + ")");
+		edu.cmu.sphinx.result.Result res = recognizer.recognize();
+		uttered = res.getBestFinalResultNoFiller();
+		if (uttered.equalsIgnoreCase(currentCharacter)) {
+			score += 10;
+			correct = true;
+		}
+		letter_trials++;
 
 		System.out.println(uttered + " (" + letter_trials + ")");
 		if (!correct && letter_trials > 3) {
@@ -251,32 +223,29 @@ public class GermanLetters {
 			currentWordCharacterIndex++;
 			resultRecognizedLabelValue
 					.setText(recognizedWord[currentLevelIndex][currentWordIndex]);
-			resultScoreLabelValue.setText(score+"");
+			resultScoreLabelValue.setText(score + "");
 
 			if (currentWordCharacterIndex == currentWord.length()) {
 				currentWordIndex++;
 				currentWordCharacterIndex = 0;
-				
-				
-				int progressValue = (int) (((1.0 * currentWordIndex) / levels.get(currentLevelIndex).length) * 100);
+
+				int progressValue = (int) (((1.0 * currentWordIndex) / levels
+						.get(currentLevelIndex).length) * 100);
 				progressBar.setValue(progressValue);
-				if(progressValue < 25) {
+				if (progressValue < 25) {
 					progressBar.setForeground(Color.red);
-				}
-				else if(progressValue < 50) {
+				} else if (progressValue < 50) {
 					progressBar.setForeground(Color.orange);
-				}
-				else if(progressValue < 75) {
+				} else if (progressValue < 75) {
 					progressBar.setForeground(Color.yellow);
-				}
-				else {
+				} else {
 					progressBar.setForeground(Color.green);
 				}
 				Rectangle progressRect = progressBar.getBounds();
 				progressRect.x = 0;
 				progressRect.y = 0;
 				progressBar.paintImmediately(progressRect);
-				
+
 				if (currentWordIndex == currentLevel.length) {
 					currentLevelIndex++;
 					currentWordIndex = 0;
@@ -311,11 +280,6 @@ public class GermanLetters {
 		startRec.setEnabled(true);
 	}
 
-	private void skipCurrentCharacter() {
-		// TODO Auto-generated method stub
-
-	}
-
 	private void theEnd() {
 		System.out.println("The end");
 		startRec.setVisible(false);
@@ -323,10 +287,10 @@ public class GermanLetters {
 		resultRecognizedLabelValue.setText("");
 		resultOriginalLabel.setText("");
 		resultOriginalLabelValue.setText("Super ! Das ist alles");
-		/*endTime = System.currentTimeMillis();
-		elapsedTime = (endTime - startTime) / 1000;
-		resultTimeLabelValue.setText(elapsedTime + " s");
-		*/
+		/*
+		 * endTime = System.currentTimeMillis(); elapsedTime = (endTime -
+		 * startTime) / 1000; resultTimeLabelValue.setText(elapsedTime + " s");
+		 */
 		frame.timer.pauseTimer();
 	}
 
@@ -341,50 +305,53 @@ public class GermanLetters {
 }
 
 class Timer implements Runnable {
-	  private Thread runThread;
-	    private boolean running = false;
-	    private boolean paused = false;
-	    private TimeFrame timeFrame;
-	    private long summedTime = 0;
+	private Thread runThread;
+	private boolean running = false;
+	private boolean paused = false;
+	private TimeFrame timeFrame;
+	private long summedTime = 0;
 
-	    public Timer(TimeFrame timeFrame) {
-	        this.timeFrame = timeFrame;
-	    }
+	public Timer(TimeFrame timeFrame) {
+		this.timeFrame = timeFrame;
+	}
 
+	public void startTimer() {
+		running = true;
+		paused = false;
+		runThread = new Thread(this);
+		runThread.start();
+	}
 
-	    public void startTimer() {
-	        running = true;
-	        paused = false;
-	        runThread = new Thread(this);
-	        runThread.start();
-	    }
+	public void pauseTimer() {
+		paused = true;
+	}
 
-	    public void pauseTimer() {
-	        paused = true;
-	    }
-
-	    @Override
-	    public void run() {
-	        long startTime = System.currentTimeMillis();
-	        while(running && !paused) {
-	            timeFrame.update(summedTime + (System.currentTimeMillis() - startTime));
-	        }
-	        if(paused)
-	            summedTime += System.currentTimeMillis() - startTime;
-	        else 
-	            summedTime = 0;
-	    }
+	@Override
+	public void run() {
+		long startTime = System.currentTimeMillis();
+		while (running && !paused) {
+			timeFrame.update(summedTime
+					+ (System.currentTimeMillis() - startTime));
+		}
+		if (paused)
+			summedTime += System.currentTimeMillis() - startTime;
+		else
+			summedTime = 0;
+	}
 }
 
 class TimeFrame extends JPanel {
-	 private JLabel time = new JLabel("00:00", JLabel.CENTER);
-	    Timer timer;
-	    public TimeFrame(){
-	        timer = new Timer(this);
-	         add(time);
-	    }
-	    public void update(long dT){
-	        time.setText(String.valueOf((dT/6000)%1000)+":"+String.valueOf((dT/1000)%1000)+","+String.valueOf((dT)%1000));
-	    }
-}
+	private JLabel time = new JLabel("00:00", JLabel.CENTER);
+	Timer timer;
 
+	public TimeFrame() {
+		timer = new Timer(this);
+		add(time);
+	}
+
+	public void update(long dT) {
+		time.setText(String.valueOf((dT / 6000) % 1000) + ":"
+				+ String.valueOf((dT / 1000) % 1000) + ","
+				+ String.valueOf((dT) % 1000));
+	}
+}
