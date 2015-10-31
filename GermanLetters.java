@@ -258,7 +258,27 @@ public class GermanLetters {
 				currentWordCharacterIndex = 0;
 				
 				
-				int progressValue = (int) (((1.0 * currentWordIndex) / levels.get(currentLevelIndex).length) * 100);
+				if (currentWordIndex == currentLevel.length) {
+					currentLevelIndex++;
+					currentWordIndex = 0;
+
+					if (currentLevelIndex == levels.size()) {
+						currentWordIndex = levels.get(levels.size() - 1).length;
+						theEnd();
+					} else {
+						levelNoLabelValue.setText(currentLevelIndex + 1 + " ");
+						resultOriginalLabelValue.setText(levels
+								.get(currentLevelIndex)[currentWordIndex]);
+						resultRecognizedLabelValue.setText("--");
+					}
+				} else {
+					resultOriginalLabelValue
+							.setText(currentLevel[currentWordIndex]);
+					resultRecognizedLabelValue.setText("--");
+				}
+				int progressValue = (int) (((1.0 * currentWordIndex) / 
+						levels.get(Math.min(currentLevelIndex,levels.size() 
+								- 1)).length) * 100);
 				progressBar.setValue(progressValue);
 				if(progressValue < 25) {
 					progressBar.setForeground(Color.red);
@@ -276,24 +296,6 @@ public class GermanLetters {
 				progressRect.x = 0;
 				progressRect.y = 0;
 				progressBar.paintImmediately(progressRect);
-				
-				if (currentWordIndex == currentLevel.length) {
-					currentLevelIndex++;
-					currentWordIndex = 0;
-
-					if (currentLevelIndex == levels.size()) {
-						theEnd();
-					} else {
-						levelNoLabelValue.setText(currentLevelIndex + 1 + " ");
-						resultOriginalLabelValue.setText(levels
-								.get(currentLevelIndex)[currentWordIndex]);
-						resultRecognizedLabelValue.setText("--");
-					}
-				} else {
-					resultOriginalLabelValue
-							.setText(currentLevel[currentWordIndex]);
-					resultRecognizedLabelValue.setText("--");
-				}
 			}
 
 		}
@@ -384,7 +386,7 @@ class TimeFrame extends JPanel {
 	         add(time);
 	    }
 	    public void update(long dT){
-	        time.setText(String.valueOf((dT/6000)%1000)+":"+String.valueOf((dT/1000)%1000)+","+String.valueOf((dT)%1000));
+	        time.setText(String.valueOf((dT/60000)%1000)+":"+String.valueOf((dT/1000)%1000)+","+String.valueOf((dT)%1000));
 	    }
 }
 
