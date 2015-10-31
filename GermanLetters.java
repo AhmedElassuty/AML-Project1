@@ -69,6 +69,7 @@ public class GermanLetters {
 
 	static String[] level_2 = { "arbeiten", "richtig", "klar", "spaß",
 			"viel", "welt", "haus", "katze", "essen", "möglich" };
+	
 
 	int currentLevelIndex = 0;
 
@@ -219,6 +220,10 @@ public class GermanLetters {
 	// }
 
 	public void handleNextCharacter() {
+		if(currentWordIndex == 0 && currentWordCharacterIndex == 0) {
+		resultRecognizedLabel.setText("Recoginzed Word : ");
+		resultRecognizedLabelValue.setText("--");
+		}
 		String[] currentLevel = levels.get(currentLevelIndex);
 		currentWord = currentLevel[currentWordIndex];
 		String currentCharacter = currentWord.charAt(currentWordCharacterIndex)
@@ -259,6 +264,7 @@ public class GermanLetters {
 				
 				
 				if (currentWordIndex == currentLevel.length) {
+					levelFinished();
 					currentLevelIndex++;
 					currentWordIndex = 0;
 
@@ -269,7 +275,7 @@ public class GermanLetters {
 						levelNoLabelValue.setText(currentLevelIndex + 1 + " ");
 						resultOriginalLabelValue.setText(levels
 								.get(currentLevelIndex)[currentWordIndex]);
-						resultRecognizedLabelValue.setText("--");
+					//	resultRecognizedLabelValue.setText("--");
 					}
 				} else {
 					resultOriginalLabelValue
@@ -334,7 +340,9 @@ public class GermanLetters {
 
 	private void levelFinished() {
 		System.out.println("LevelFinished");
-
+		resultRecognizedLabel.setText("");
+		resultRecognizedLabelValue.setText("Wow ! level " + 
+		(currentLevelIndex + 1)  +" is over");
 	}
 
 	public static void main(String[] args) {
