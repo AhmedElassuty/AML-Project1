@@ -1,9 +1,11 @@
 package edu.cmu.sphinx.demo.miniproject1tut9t4;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
@@ -54,13 +56,15 @@ public class GermanLetters {
 	ArrayList<String[]> levels = new ArrayList<>();
 	String[][] recognizedWord = new String[2][20];
 
+	
+
 	static String[] level_1 = { "Hallo", "Bluse", "Hund", "Aufwiedersehen",
 		"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett", "mund",
 		"hose", "nase", "schuhe", "singen", "sonne", "mond", "sterne",
 		"wolken", "himmel" };
 
-	static String[] level_2 = { "Hallo", "Bluse", "Hund", "Aufwiedersehen",
-			"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett" };
+	static String[] level_2 = { "arbeiten", "richtig", "klar", "spaß",
+			"viel", "welt", "haus", "katze", "essen", "möglich" };
 
 	int currentLevelIndex = 0;
 
@@ -214,7 +218,7 @@ public class GermanLetters {
 
 		String uttered = "";
 		boolean correct = false;
-		if (letter_trials < 3) {
+	//	if (letter_trials < 3) {
 			System.out.println("Say something (" + letter_trials + ")");
 			edu.cmu.sphinx.result.Result res = recognizer.recognize();
 			uttered = res.getBestFinalResultNoFiller();
@@ -223,10 +227,10 @@ public class GermanLetters {
 				correct = true;
 			}
 			letter_trials++;
-		}
+		//}
 
 		System.out.println(uttered + " (" + letter_trials + ")");
-		if (!correct && letter_trials == NUMBER_OF_TRIALS) {
+		if (!correct && letter_trials > 3) {
 			score -= 2;
 			correct = true;
 		}
@@ -239,12 +243,32 @@ public class GermanLetters {
 			currentWordCharacterIndex++;
 			resultRecognizedLabelValue
 					.setText(recognizedWord[currentLevelIndex][currentWordIndex]);
-			resultScoreLabelValue.setText(score + "%");
+			resultScoreLabelValue.setText(score+"");
 
 			if (currentWordCharacterIndex == currentWord.length()) {
 				currentWordIndex++;
 				currentWordCharacterIndex = 0;
-
+				
+				
+				int progressValue = (int) (((1.0 * currentWordIndex) / levels.get(currentLevelIndex).length) * 100);
+				progressBar.setValue(progressValue);
+				if(progressValue < 25) {
+					progressBar.setForeground(Color.red);
+				}
+				else if(progressValue < 50) {
+					progressBar.setForeground(Color.orange);
+				}
+				else if(progressValue < 75) {
+					progressBar.setForeground(Color.yellow);
+				}
+				else {
+					progressBar.setForeground(Color.green);
+				}
+				Rectangle progressRect = progressBar.getBounds();
+				progressRect.x = 0;
+				progressRect.y = 0;
+				progressBar.paintImmediately(progressRect);
+				
 				if (currentWordIndex == currentLevel.length) {
 					currentLevelIndex++;
 					currentWordIndex = 0;
@@ -252,6 +276,7 @@ public class GermanLetters {
 					if (currentLevelIndex == levels.size()) {
 						theEnd();
 					} else {
+						levelNoLabelValue.setText(currentLevelIndex + 1 + " ");
 						resultOriginalLabelValue.setText(levels
 								.get(currentLevelIndex)[currentWordIndex]);
 						resultRecognizedLabelValue.setText("--");
@@ -264,6 +289,7 @@ public class GermanLetters {
 			}
 
 		}
+		resultScoreLabelValue.setText(score + "");
 
 		// int progressValue = (int) (((1.0 * i) / size) * 100);
 		// progressBar.setValue(progressValue);
@@ -284,6 +310,14 @@ public class GermanLetters {
 
 	private void theEnd() {
 		System.out.println("The end");
+		startRec.setVisible(false);
+		resultRecognizedLabel.setText("");
+		resultRecognizedLabelValue.setText("");
+		resultOriginalLabel.setText("");
+		resultOriginalLabelValue.setText("Super ! Das ist alles");
+		endTime = System.currentTimeMillis();
+		elapsedTime = (endTime - startTime) / 1000;
+		resultTimeLabelValue.setText(elapsedTime + " s");
 	}
 
 	private void levelFinished() {
@@ -295,3 +329,4 @@ public class GermanLetters {
 		new GermanLetters();
 	}
 }
+
