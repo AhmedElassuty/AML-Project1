@@ -1,5 +1,7 @@
 package edu.cmu.sphinx.demo.miniproject1tut9t4;
 
+
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -19,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+
 
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.recognizer.Recognizer;
@@ -49,6 +52,8 @@ public class GermanLetters {
 
 	JLabel levelNoLabel;
 	JLabel levelNoLabelValue;
+	
+	TimeFrame frame;
 
 	boolean firstClick = true;
 	Recognizer recognizer;
@@ -56,7 +61,6 @@ public class GermanLetters {
 	ArrayList<String[]> levels = new ArrayList<>();
 	String[][] recognizedWord = new String[2][20];
 
-	
 
 	static String[] level_1 = { "Hallo", "Bluse", "Hund", "Aufwiedersehen",
 		"Tschuss", "danke", "bitte", "schÖn", "schlafen", "bett", "mund",
@@ -152,7 +156,10 @@ public class GermanLetters {
 		resultPanel.add(resultScoreLabelValue);
 
 		resultPanel.add(resultTimeLabel);
-		resultPanel.add(resultTimeLabelValue);
+		//resultPanel.add(resultTimeLabelValue);
+		
+		frame = new TimeFrame();
+		resultPanel.add(frame);
 
 		ourFrame.setContentPane(controlPanel);
 
@@ -167,6 +174,7 @@ public class GermanLetters {
 					public void run() {
 						if (firstClick) {
 							startTime = System.currentTimeMillis();
+							frame.timer.startTimer();
 							firstClick = false;
 						}
 						handleNextCharacter();
@@ -315,9 +323,11 @@ public class GermanLetters {
 		resultRecognizedLabelValue.setText("");
 		resultOriginalLabel.setText("");
 		resultOriginalLabelValue.setText("Super ! Das ist alles");
-		endTime = System.currentTimeMillis();
+		/*endTime = System.currentTimeMillis();
 		elapsedTime = (endTime - startTime) / 1000;
 		resultTimeLabelValue.setText(elapsedTime + " s");
+		*/
+		frame.timer.pauseTimer();
 	}
 
 	private void levelFinished() {
@@ -328,5 +338,53 @@ public class GermanLetters {
 	public static void main(String[] args) {
 		new GermanLetters();
 	}
+}
+
+class Timer implements Runnable {
+	  private Thread runThread;
+	    private boolean running = false;
+	    private boolean paused = false;
+	    private TimeFrame timeFrame;
+	    private long summedTime = 0;
+
+	    public Timer(TimeFrame timeFrame) {
+	        this.timeFrame = timeFrame;
+	    }
+
+
+	    public void startTimer() {
+	        running = true;
+	        paused = false;
+	        runThread = new Thread(this);
+	        runThread.start();
+	    }
+
+	    public void pauseTimer() {
+	        paused = true;
+	    }
+
+	    @Override
+	    public void run() {
+	        long startTime = System.currentTimeMillis();
+	        while(running && !paused) {
+	            timeFrame.update(summedTime + (System.currentTimeMillis() - startTime));
+	        }
+	        if(paused)
+	            summedTime += System.currentTimeMillis() - startTime;
+	        else 
+	            summedTime = 0;
+	    }
+}
+
+class TimeFrame extends JPanel {
+	 private JLabel time = new JLabel("00:00", JLabel.CENTER);
+	    Timer timer;
+	    public TimeFrame(){
+	        timer = new Timer(this);
+	         add(time);
+	    }
+	    public void update(long dT){
+	        time.setText(String.valueOf((dT/6000)%1000)+":"+String.valueOf((dT/1000)%1000)+","+String.valueOf((dT)%1000));
+	    }
 }
 
